@@ -27,6 +27,7 @@ type PlayerInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	PlayerId      string                 `protobuf:"bytes,1,opt,name=player_id,json=playerId,proto3" json:"player_id,omitempty"`
 	PlayerName    string                 `protobuf:"bytes,2,opt,name=player_name,json=playerName,proto3" json:"player_name,omitempty"`
+	IsHost        bool                   `protobuf:"varint,3,opt,name=is_host,json=isHost,proto3" json:"is_host,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -73,6 +74,13 @@ func (x *PlayerInfo) GetPlayerName() string {
 		return x.PlayerName
 	}
 	return ""
+}
+
+func (x *PlayerInfo) GetIsHost() bool {
+	if x != nil {
+		return x.IsHost
+	}
+	return false
 }
 
 // Create room
@@ -755,12 +763,13 @@ var File_file_proto protoreflect.FileDescriptor
 const file_file_proto_rawDesc = "" +
 	"\n" +
 	"\n" +
-	"file.proto\x12\x05lobby\x1a\x1bbuf/validate/validate.proto\"\\\n" +
+	"file.proto\x12\x05lobby\x1a\x1bbuf/validate/validate.proto\"u\n" +
 	"\n" +
 	"PlayerInfo\x12$\n" +
 	"\tplayer_id\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\bplayerId\x12(\n" +
 	"\vplayer_name\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\n" +
-	"playerName\"\x94\x01\n" +
+	"playerName\x12\x17\n" +
+	"\ais_host\x18\x03 \x01(\bR\x06isHost\"\x94\x01\n" +
 	"\x11CreateRoomRequest\x12&\n" +
 	"\troom_name\x18\x01 \x01(\tB\t\xbaH\x06r\x04\x10\x01\x182R\broomName\x12-\n" +
 	"\x0ehost_player_id\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\fhostPlayerId\x12(\n" +

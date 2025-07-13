@@ -48,10 +48,11 @@ func (r InMemoryService) CreateRoom(ctx context.Context, req *connect.Request[lo
 		Message: "Room created",
 	}
 
-	//make player join the room automatically
+	//make player join the room automatically as the host
 	player := &lobbypb.PlayerInfo{
 		PlayerId:   req.Msg.HostPlayerId,
 		PlayerName: req.Msg.PlayerName,
+		IsHost:     true,
 	}
 	r.mu.Lock()
 	room, ok := r.rooms[roomID]
@@ -103,6 +104,7 @@ func (r InMemoryService) JoinRoom(ctx context.Context, req *connect.Request[lobb
 	player := &lobbypb.PlayerInfo{
 		PlayerId:   req.Msg.PlayerId,
 		PlayerName: req.Msg.PlayerName,
+		IsHost:     false,
 	}
 	room.Members[req.Msg.PlayerId] = player
 

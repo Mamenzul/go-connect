@@ -61,6 +61,8 @@ func (m *PlayerInfo) validate(all bool) error {
 
 	// no validation rules for PlayerName
 
+	// no validation rules for IsHost
+
 	if len(errors) > 0 {
 		return PlayerInfoMultiError(errors)
 	}
