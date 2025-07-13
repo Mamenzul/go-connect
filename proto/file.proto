@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package lobby;
+
+import "buf/validate/validate.proto";
+
+option go_package = "go-connect/gen;lobbypb";
+
+// Player info
+message PlayerInfo {
+  string player_id = 1 [(buf.validate.field).string.min_len = 1];
+  string player_name = 2 [(buf.validate.field).string.min_len = 1];
+}
+
+// Create room
+message CreateRoomRequest {
+  string room_name = 1 [(buf.validate.field).string.min_len = 1, (buf.validate.field).string.max_len = 50];
+  string host_player_id = 2 [(buf.validate.field).string.min_len = 1];
+  string player_name = 3 [(buf.validate.field).string.min_len = 1];
+}
+
+message CreateRoomResponse {
+  string room_id = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+// Join room
+message JoinRoomRequest {
+  string room_id = 1 [(buf.validate.field).string.min_len = 1];
+  string player_id = 2 [(buf.validate.field).string.min_len = 1];
+  string player_name = 3 [(buf.validate.field).string.min_len = 1];
+}
+
+message JoinRoomResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Leave room
+message LeaveRoomRequest {
+  string room_id = 1 [(buf.validate.field).string.min_len = 1];
+  string player_id = 2 [(buf.validate.field).string.min_len = 1];
+}
+
+message LeaveRoomResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// List members
+message ListMembersRequest {
+  string room_id = 1 [(buf.validate.field).string.min_len = 1];
+}
+
+message ListMembersResponse {
+  repeated PlayerInfo players = 1;
+}
+
+// Broadcast events
+message PlayerJoinedBroadcast {
+  string room_id = 1 [(buf.validate.field).string.min_len = 1];
+  PlayerInfo player = 2;
+  int64 timestamp = 3;
+}
+
+message PlayerLeftBroadcast {
+  string room_id = 1 [(buf.validate.field).string.min_len = 1];
+  PlayerInfo player = 2;
+  int64 timestamp = 3;
+}
+
+message RoomEventRequest {
+  string room_id = 1 [(buf.validate.field).string.min_len = 1];
+}
+
+message RoomEvent {
+  oneof event {
+    PlayerJoinedBroadcast player_joined = 1;
+    PlayerLeftBroadcast player_left = 2;
+  }
+}
+
+// Service for room management
+service RoomService {
+  rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
+  rpc JoinRoom(JoinRoomRequest) returns (JoinRoomResponse);
+  rpc LeaveRoom(LeaveRoomRequest) returns (LeaveRoomResponse);
+  rpc ListMembers(ListMembersRequest) returns (ListMembersResponse);
+}
+
+// Service for streaming room events
+service RoomBroadcast {
+  rpc StreamRoomEvents(RoomEventRequest) returns (stream RoomEvent);
+}
