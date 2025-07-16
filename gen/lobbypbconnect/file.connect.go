@@ -43,6 +43,8 @@ const (
 	RoomServiceLeaveRoomProcedure = "/lobby.RoomService/LeaveRoom"
 	// RoomServiceListMembersProcedure is the fully-qualified name of the RoomService's ListMembers RPC.
 	RoomServiceListMembersProcedure = "/lobby.RoomService/ListMembers"
+	// RoomServiceSendMessageProcedure is the fully-qualified name of the RoomService's SendMessage RPC.
+	RoomServiceSendMessageProcedure = "/lobby.RoomService/SendMessage"
 	// RoomBroadcastStreamRoomEventsProcedure is the fully-qualified name of the RoomBroadcast's
 	// StreamRoomEvents RPC.
 	RoomBroadcastStreamRoomEventsProcedure = "/lobby.RoomBroadcast/StreamRoomEvents"
@@ -54,6 +56,7 @@ type RoomServiceClient interface {
 	JoinRoom(context.Context, *connect.Request[gen.JoinRoomRequest]) (*connect.Response[gen.JoinRoomResponse], error)
 	LeaveRoom(context.Context, *connect.Request[gen.LeaveRoomRequest]) (*connect.Response[gen.LeaveRoomResponse], error)
 	ListMembers(context.Context, *connect.Request[gen.ListMembersRequest]) (*connect.Response[gen.ListMembersResponse], error)
+	SendMessage(context.Context, *connect.Request[gen.PlayerSentMessageRequest]) (*connect.Response[gen.PlayerSentMessageResponse], error)
 }
 
 // NewRoomServiceClient constructs a client for the lobby.RoomService service. By default, it uses
@@ -91,6 +94,12 @@ func NewRoomServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(roomServiceMethods.ByName("ListMembers")),
 			connect.WithClientOptions(opts...),
 		),
+		sendMessage: connect.NewClient[gen.PlayerSentMessageRequest, gen.PlayerSentMessageResponse](
+			httpClient,
+			baseURL+RoomServiceSendMessageProcedure,
+			connect.WithSchema(roomServiceMethods.ByName("SendMessage")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -100,6 +109,7 @@ type roomServiceClient struct {
 	joinRoom    *connect.Client[gen.JoinRoomRequest, gen.JoinRoomResponse]
 	leaveRoom   *connect.Client[gen.LeaveRoomRequest, gen.LeaveRoomResponse]
 	listMembers *connect.Client[gen.ListMembersRequest, gen.ListMembersResponse]
+	sendMessage *connect.Client[gen.PlayerSentMessageRequest, gen.PlayerSentMessageResponse]
 }
 
 // CreateRoom calls lobby.RoomService.CreateRoom.
@@ -122,12 +132,18 @@ func (c *roomServiceClient) ListMembers(ctx context.Context, req *connect.Reques
 	return c.listMembers.CallUnary(ctx, req)
 }
 
+// SendMessage calls lobby.RoomService.SendMessage.
+func (c *roomServiceClient) SendMessage(ctx context.Context, req *connect.Request[gen.PlayerSentMessageRequest]) (*connect.Response[gen.PlayerSentMessageResponse], error) {
+	return c.sendMessage.CallUnary(ctx, req)
+}
+
 // RoomServiceHandler is an implementation of the lobby.RoomService service.
 type RoomServiceHandler interface {
 	CreateRoom(context.Context, *connect.Request[gen.CreateRoomRequest]) (*connect.Response[gen.CreateRoomResponse], error)
 	JoinRoom(context.Context, *connect.Request[gen.JoinRoomRequest]) (*connect.Response[gen.JoinRoomResponse], error)
 	LeaveRoom(context.Context, *connect.Request[gen.LeaveRoomRequest]) (*connect.Response[gen.LeaveRoomResponse], error)
 	ListMembers(context.Context, *connect.Request[gen.ListMembersRequest]) (*connect.Response[gen.ListMembersResponse], error)
+	SendMessage(context.Context, *connect.Request[gen.PlayerSentMessageRequest]) (*connect.Response[gen.PlayerSentMessageResponse], error)
 }
 
 // NewRoomServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -161,6 +177,12 @@ func NewRoomServiceHandler(svc RoomServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(roomServiceMethods.ByName("ListMembers")),
 		connect.WithHandlerOptions(opts...),
 	)
+	roomServiceSendMessageHandler := connect.NewUnaryHandler(
+		RoomServiceSendMessageProcedure,
+		svc.SendMessage,
+		connect.WithSchema(roomServiceMethods.ByName("SendMessage")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/lobby.RoomService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case RoomServiceCreateRoomProcedure:
@@ -171,6 +193,8 @@ func NewRoomServiceHandler(svc RoomServiceHandler, opts ...connect.HandlerOption
 			roomServiceLeaveRoomHandler.ServeHTTP(w, r)
 		case RoomServiceListMembersProcedure:
 			roomServiceListMembersHandler.ServeHTTP(w, r)
+		case RoomServiceSendMessageProcedure:
+			roomServiceSendMessageHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -194,6 +218,10 @@ func (UnimplementedRoomServiceHandler) LeaveRoom(context.Context, *connect.Reque
 
 func (UnimplementedRoomServiceHandler) ListMembers(context.Context, *connect.Request[gen.ListMembersRequest]) (*connect.Response[gen.ListMembersResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("lobby.RoomService.ListMembers is not implemented"))
+}
+
+func (UnimplementedRoomServiceHandler) SendMessage(context.Context, *connect.Request[gen.PlayerSentMessageRequest]) (*connect.Response[gen.PlayerSentMessageResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("lobby.RoomService.SendMessage is not implemented"))
 }
 
 // RoomBroadcastClient is a client for the lobby.RoomBroadcast service.

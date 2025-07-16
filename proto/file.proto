@@ -15,9 +15,8 @@ message PlayerInfo {
 
 // Create room
 message CreateRoomRequest {
-  string room_name = 1 [(buf.validate.field).string.min_len = 1, (buf.validate.field).string.max_len = 50];
-  string host_player_id = 2 [(buf.validate.field).string.min_len = 1];
-  string player_name = 3 [(buf.validate.field).string.min_len = 1];
+  string player_id = 1 [(buf.validate.field).string.min_len = 1];
+  string player_name = 2 [(buf.validate.field).string.min_len = 1];
 }
 
 message CreateRoomResponse {
@@ -58,6 +57,17 @@ message ListMembersResponse {
   repeated PlayerInfo players = 1;
 }
 
+// Player sent message
+message PlayerSentMessageRequest {
+  string room_id = 1 [(buf.validate.field).string.min_len = 1];
+  string player_id = 2 [(buf.validate.field).string.min_len = 1];
+  string message = 3 [(buf.validate.field).string.min_len = 1];
+}
+message PlayerSentMessageResponse {
+  bool success = 1;
+  string message = 2;
+}
+
 // Broadcast events
 message PlayerJoinedBroadcast {
   string room_id = 1 [(buf.validate.field).string.min_len = 1];
@@ -71,6 +81,13 @@ message PlayerLeftBroadcast {
   int64 timestamp = 3;
 }
 
+message ChatMessageBroadcast  {
+  string room_id = 1    [(buf.validate.field).string.min_len = 1];
+  string player_id = 2  [(buf.validate.field).string.min_len = 1];
+  string message = 3    [(buf.validate.field).string.min_len = 1];
+  int64 timestamp = 4;
+}
+
 message RoomEventRequest {
   string room_id = 1 [(buf.validate.field).string.min_len = 1];
 }
@@ -79,6 +96,7 @@ message RoomEvent {
   oneof event {
     PlayerJoinedBroadcast player_joined = 1;
     PlayerLeftBroadcast player_left = 2;
+    ChatMessageBroadcast  chat_message_broadcast = 3;
   }
 }
 
@@ -88,6 +106,7 @@ service RoomService {
   rpc JoinRoom(JoinRoomRequest) returns (JoinRoomResponse);
   rpc LeaveRoom(LeaveRoomRequest) returns (LeaveRoomResponse);
   rpc ListMembers(ListMembersRequest) returns (ListMembersResponse);
+  rpc SendMessage(PlayerSentMessageRequest) returns (PlayerSentMessageResponse);
 }
 
 // Service for streaming room events

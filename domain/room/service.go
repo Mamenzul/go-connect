@@ -18,6 +18,7 @@ type Service interface {
 	LeaveRoom(ctx context.Context, req *connect.Request[lobbypb.LeaveRoomRequest]) (*connect.Response[lobbypb.LeaveRoomResponse], error)
 	ListMembers(ctx context.Context, req *connect.Request[lobbypb.ListMembersRequest]) (*connect.Response[lobbypb.ListMembersResponse], error)
 	StreamRoomEvents(ctx context.Context, req *connect.Request[lobbypb.RoomEventRequest], stream *connect.ServerStream[lobbypb.RoomEvent]) error
+	SendMessage(ctx context.Context, req *connect.Request[lobbypb.PlayerSentMessageRequest]) (*connect.Response[lobbypb.PlayerSentMessageResponse], error)
 }
 
 type InMemoryService struct {
@@ -37,7 +38,6 @@ func (r InMemoryService) CreateRoom(ctx context.Context, req *connect.Request[lo
 
 	r.mu.Lock()
 	r.rooms[roomID] = &Room{
-		Name:    req.Msg.RoomName,
 		Members: make(map[string]*lobbypb.PlayerInfo),
 	}
 	r.mu.Unlock()
@@ -50,10 +50,11 @@ func (r InMemoryService) CreateRoom(ctx context.Context, req *connect.Request[lo
 
 	//make player join the room automatically as the host
 	player := &lobbypb.PlayerInfo{
-		PlayerId:   req.Msg.HostPlayerId,
+		PlayerId:   req.Msg.PlayerId,
 		PlayerName: req.Msg.PlayerName,
 		IsHost:     true,
 	}
+
 	r.mu.Lock()
 	room, ok := r.rooms[roomID]
 	if !ok {
@@ -63,7 +64,7 @@ func (r InMemoryService) CreateRoom(ctx context.Context, req *connect.Request[lo
 			Message: "Failed to create room",
 		}), nil
 	}
-	room.Members[req.Msg.HostPlayerId] = player
+	room.Members[req.Msg.PlayerId] = player
 	r.mu.Unlock()
 	// Broadcast room created event
 	if room.broadcast != nil {
@@ -84,7 +85,7 @@ func (r InMemoryService) CreateRoom(ctx context.Context, req *connect.Request[lo
 			}
 		}
 	}
-	log.Println("Room created:", roomID, "by player:", req.Msg.HostPlayerId)
+	log.Println("Room created:", roomID, "by player:", req.Msg.PlayerId)
 
 	return connect.NewResponse(resp), nil
 }
@@ -184,6 +185,7 @@ func (r InMemoryService) LeaveRoom(ctx context.Context, req *connect.Request[lob
 			Message: "Room not found",
 		}), nil
 	}
+
 	player, exists := room.Members[req.Msg.PlayerId]
 	if !exists {
 		return connect.NewResponse(&lobbypb.LeaveRoomResponse{
@@ -192,7 +194,21 @@ func (r InMemoryService) LeaveRoom(ctx context.Context, req *connect.Request[lob
 		}), nil
 	}
 
+	// If the player is the host, transfer host to another player before leaving in a safe manner
+	if player.IsHost {
+		for _, p := range room.Members {
+			if p.PlayerId != req.Msg.PlayerId {
+				p.IsHost = true // Transfer host to the first found player
+				log.Println("Host transferred from", req.Msg.PlayerId, "to", p.PlayerId, "in room:", req.Msg.RoomId)
+				break
+			}
+		}
+	}
+
+	// Remove the player from the room
 	delete(room.Members, req.Msg.PlayerId)
+
+	// Broadcast that the player has left
 	if room.broadcast != nil {
 		event := &lobbypb.RoomEvent{
 			Event: &lobbypb.RoomEvent_PlayerLeft{
@@ -213,8 +229,8 @@ func (r InMemoryService) LeaveRoom(ctx context.Context, req *connect.Request[lob
 
 	log.Println("Player", req.Msg.PlayerId, "left room:", req.Msg.RoomId)
 
+	// If the room is now empty, delete it
 	if len(room.Members) == 0 {
-		// If no members left, remove the room
 		delete(r.rooms, req.Msg.RoomId)
 		log.Println("Room", req.Msg.RoomId, "deleted as it has no members")
 	}
@@ -241,5 +257,53 @@ func (r InMemoryService) ListMembers(ctx context.Context, req *connect.Request[l
 
 	return connect.NewResponse(&lobbypb.ListMembersResponse{
 		Players: players,
+	}), nil
+}
+
+func (r InMemoryService) SendMessage(ctx context.Context, req *connect.Request[lobbypb.PlayerSentMessageRequest]) (*connect.Response[lobbypb.PlayerSentMessageResponse], error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	room, ok := r.rooms[req.Msg.RoomId]
+	if !ok {
+		return connect.NewResponse(&lobbypb.PlayerSentMessageResponse{
+			Success: false,
+			Message: "Room not found",
+		}), nil
+	}
+
+	_, exists := room.Members[req.Msg.PlayerId]
+	if !exists {
+		return connect.NewResponse(&lobbypb.PlayerSentMessageResponse{
+			Success: false,
+			Message: "Player not found in room",
+		}), nil
+	}
+
+	if room.broadcast != nil {
+		event := &lobbypb.RoomEvent{
+			Event: &lobbypb.RoomEvent_ChatMessageBroadcast{
+				ChatMessageBroadcast: &lobbypb.ChatMessageBroadcast{
+					RoomId:    req.Msg.RoomId,
+					PlayerId:  req.Msg.PlayerId,
+					Message:   req.Msg.Message,
+					Timestamp: time.Now().Unix(),
+				},
+			},
+		}
+		for _, ch := range room.broadcast {
+			select {
+			case ch <- event:
+			default:
+				log.Println("Failed to send message to broadcast channel, channel full or closed")
+			}
+		}
+	}
+
+	log.Println("Player", req.Msg.PlayerId, "sent message in room:", req.Msg.RoomId)
+
+	return connect.NewResponse(&lobbypb.PlayerSentMessageResponse{
+		Success: true,
+		Message: "Message sent",
 	}), nil
 }

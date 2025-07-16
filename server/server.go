@@ -36,3 +36,7 @@ func (s *Server) ListMembers(ctx context.Context, req *connect.Request[lobbypb.L
 func (s *Server) StreamRoomEvents(ctx context.Context, req *connect.Request[lobbypb.RoomEventRequest], stream *connect.ServerStream[lobbypb.RoomEvent]) error {
 	return s.RoomService.StreamRoomEvents(ctx, req, stream)
 }
+
+func (s *Server) SendMessage(ctx context.Context, req *connect.Request[lobbypb.PlayerSentMessageRequest]) (*connect.Response[lobbypb.PlayerSentMessageResponse], error) {
+	return s.RoomService.SendMessage(ctx, req)
+}

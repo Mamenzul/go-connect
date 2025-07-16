@@ -5,6 +5,8 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"path/filepath"
+	"strings"
 
 	"connectrpc.com/connect"
 	"connectrpc.com/validate"
@@ -26,6 +28,7 @@ func main() {
 		os.Exit(1)
 	}
 
+	// gRPC Connect handlers
 	roomServicePath, roomServiceHandler := lobbypbconnect.NewRoomServiceHandler(
 		srv,
 		connect.WithInterceptors(validateInterceptor),
@@ -37,7 +40,29 @@ func main() {
 	mux.Handle(roomServicePath, roomServiceHandler)
 	mux.Handle(roomBroadcastPath, roomBroadcastHandler)
 
-	log.Println("✅ Connect server running on http://localhost:8080")
+	// Static file and index.html fallback handler
+	distDir := "./public/frontend/dist"
+	fs := http.FileServer(http.Dir(distDir))
+
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// If the request matches a known gRPC route, let those handlers handle it
+		if strings.HasPrefix(r.URL.Path, roomServicePath) || strings.HasPrefix(r.URL.Path, roomBroadcastPath) {
+			mux.ServeHTTP(w, r)
+			return
+		}
+
+		// Attempt to serve static asset
+		path := filepath.Join(distDir, r.URL.Path)
+		if info, err := os.Stat(path); err == nil && !info.IsDir() {
+			fs.ServeHTTP(w, r)
+			return
+		}
+
+		// Fallback to index.html for client-side routing
+		http.ServeFile(w, r, filepath.Join(distDir, "index.html"))
+	})
+
+	log.Println("✅ Server running on http://localhost:8080")
 	if err := http.ListenAndServe(":8080", utils.WithCORS(mux)); err != nil {
 		log.Fatal(err)
 	}

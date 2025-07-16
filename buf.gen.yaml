@@ -13,13 +13,13 @@ plugins:
     opt:
       - paths=source_relative
   - remote: buf.build/connectrpc/query-es
-    out: frontend/vite-project/src/gen
+    out: public/frontend/src/gen
     opt:
       - target=ts
       - import_extension=js
     include_imports: true
   - remote: buf.build/bufbuild/es
-    out: frontend/vite-project/src/gen
+    out: public/frontend/src/gen
     opt:
       - target=ts
       - import_extension=js
