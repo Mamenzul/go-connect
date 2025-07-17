@@ -280,12 +280,20 @@ func (r InMemoryService) SendMessage(ctx context.Context, req *connect.Request[l
 		}), nil
 	}
 
+	// find player in map by id
+	player, exists := room.Members[req.Msg.PlayerId]
+	if !exists {
+		return connect.NewResponse(&lobbypb.PlayerSentMessageResponse{
+			Success: false,
+			Message: "Player not found in room",
+		}), nil
+	}
 	if room.broadcast != nil {
 		event := &lobbypb.RoomEvent{
 			Event: &lobbypb.RoomEvent_ChatMessageBroadcast{
 				ChatMessageBroadcast: &lobbypb.ChatMessageBroadcast{
 					RoomId:    req.Msg.RoomId,
-					PlayerId:  req.Msg.PlayerId,
+					Player:    player,
 					Message:   req.Msg.Message,
 					Timestamp: time.Now().Unix(),
 				},

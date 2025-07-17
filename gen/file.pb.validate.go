@@ -1522,7 +1522,34 @@ func (m *ChatMessageBroadcast) validate(all bool) error {
 
 	// no validation rules for RoomId
 
-	// no validation rules for PlayerId
+	if all {
+		switch v := interface{}(m.GetPlayer()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, ChatMessageBroadcastValidationError{
+					field:  "Player",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, ChatMessageBroadcastValidationError{
+					field:  "Player",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetPlayer()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return ChatMessageBroadcastValidationError{
+				field:  "Player",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	// no validation rules for Message
 

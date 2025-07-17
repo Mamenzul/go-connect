@@ -740,7 +740,7 @@ func (x *PlayerLeftBroadcast) GetTimestamp() int64 {
 type ChatMessageBroadcast struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RoomId        string                 `protobuf:"bytes,1,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty"`
-	PlayerId      string                 `protobuf:"bytes,2,opt,name=player_id,json=playerId,proto3" json:"player_id,omitempty"`
+	Player        *PlayerInfo            `protobuf:"bytes,2,opt,name=player,proto3" json:"player,omitempty"`
 	Message       string                 `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
 	Timestamp     int64                  `protobuf:"varint,4,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -784,11 +784,11 @@ func (x *ChatMessageBroadcast) GetRoomId() string {
 	return ""
 }
 
-func (x *ChatMessageBroadcast) GetPlayerId() string {
+func (x *ChatMessageBroadcast) GetPlayer() *PlayerInfo {
 	if x != nil {
-		return x.PlayerId
+		return x.Player
 	}
-	return ""
+	return nil
 }
 
 func (x *ChatMessageBroadcast) GetMessage() string {
@@ -999,10 +999,10 @@ const file_file_proto_rawDesc = "" +
 	"\x13PlayerLeftBroadcast\x12 \n" +
 	"\aroom_id\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x06roomId\x12)\n" +
 	"\x06player\x18\x02 \x01(\v2\x11.lobby.PlayerInfoR\x06player\x12\x1c\n" +
-	"\ttimestamp\x18\x03 \x01(\x03R\ttimestamp\"\x9f\x01\n" +
+	"\ttimestamp\x18\x03 \x01(\x03R\ttimestamp\"\xa4\x01\n" +
 	"\x14ChatMessageBroadcast\x12 \n" +
-	"\aroom_id\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x06roomId\x12$\n" +
-	"\tplayer_id\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\bplayerId\x12!\n" +
+	"\aroom_id\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x06roomId\x12)\n" +
+	"\x06player\x18\x02 \x01(\v2\x11.lobby.PlayerInfoR\x06player\x12!\n" +
 	"\amessage\x18\x03 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\amessage\x12\x1c\n" +
 	"\ttimestamp\x18\x04 \x01(\x03R\ttimestamp\"4\n" +
 	"\x10RoomEventRequest\x12 \n" +
@@ -1058,26 +1058,27 @@ var file_file_proto_depIdxs = []int32{
 	0,  // 0: lobby.ListMembersResponse.players:type_name -> lobby.PlayerInfo
 	0,  // 1: lobby.PlayerJoinedBroadcast.player:type_name -> lobby.PlayerInfo
 	0,  // 2: lobby.PlayerLeftBroadcast.player:type_name -> lobby.PlayerInfo
-	11, // 3: lobby.RoomEvent.player_joined:type_name -> lobby.PlayerJoinedBroadcast
-	12, // 4: lobby.RoomEvent.player_left:type_name -> lobby.PlayerLeftBroadcast
-	13, // 5: lobby.RoomEvent.chat_message_broadcast:type_name -> lobby.ChatMessageBroadcast
-	1,  // 6: lobby.RoomService.CreateRoom:input_type -> lobby.CreateRoomRequest
-	3,  // 7: lobby.RoomService.JoinRoom:input_type -> lobby.JoinRoomRequest
-	5,  // 8: lobby.RoomService.LeaveRoom:input_type -> lobby.LeaveRoomRequest
-	7,  // 9: lobby.RoomService.ListMembers:input_type -> lobby.ListMembersRequest
-	9,  // 10: lobby.RoomService.SendMessage:input_type -> lobby.PlayerSentMessageRequest
-	14, // 11: lobby.RoomBroadcast.StreamRoomEvents:input_type -> lobby.RoomEventRequest
-	2,  // 12: lobby.RoomService.CreateRoom:output_type -> lobby.CreateRoomResponse
-	4,  // 13: lobby.RoomService.JoinRoom:output_type -> lobby.JoinRoomResponse
-	6,  // 14: lobby.RoomService.LeaveRoom:output_type -> lobby.LeaveRoomResponse
-	8,  // 15: lobby.RoomService.ListMembers:output_type -> lobby.ListMembersResponse
-	10, // 16: lobby.RoomService.SendMessage:output_type -> lobby.PlayerSentMessageResponse
-	15, // 17: lobby.RoomBroadcast.StreamRoomEvents:output_type -> lobby.RoomEvent
-	12, // [12:18] is the sub-list for method output_type
-	6,  // [6:12] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	0,  // 3: lobby.ChatMessageBroadcast.player:type_name -> lobby.PlayerInfo
+	11, // 4: lobby.RoomEvent.player_joined:type_name -> lobby.PlayerJoinedBroadcast
+	12, // 5: lobby.RoomEvent.player_left:type_name -> lobby.PlayerLeftBroadcast
+	13, // 6: lobby.RoomEvent.chat_message_broadcast:type_name -> lobby.ChatMessageBroadcast
+	1,  // 7: lobby.RoomService.CreateRoom:input_type -> lobby.CreateRoomRequest
+	3,  // 8: lobby.RoomService.JoinRoom:input_type -> lobby.JoinRoomRequest
+	5,  // 9: lobby.RoomService.LeaveRoom:input_type -> lobby.LeaveRoomRequest
+	7,  // 10: lobby.RoomService.ListMembers:input_type -> lobby.ListMembersRequest
+	9,  // 11: lobby.RoomService.SendMessage:input_type -> lobby.PlayerSentMessageRequest
+	14, // 12: lobby.RoomBroadcast.StreamRoomEvents:input_type -> lobby.RoomEventRequest
+	2,  // 13: lobby.RoomService.CreateRoom:output_type -> lobby.CreateRoomResponse
+	4,  // 14: lobby.RoomService.JoinRoom:output_type -> lobby.JoinRoomResponse
+	6,  // 15: lobby.RoomService.LeaveRoom:output_type -> lobby.LeaveRoomResponse
+	8,  // 16: lobby.RoomService.ListMembers:output_type -> lobby.ListMembersResponse
+	10, // 17: lobby.RoomService.SendMessage:output_type -> lobby.PlayerSentMessageResponse
+	15, // 18: lobby.RoomBroadcast.StreamRoomEvents:output_type -> lobby.RoomEvent
+	13, // [13:19] is the sub-list for method output_type
+	7,  // [7:13] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_file_proto_init() }
