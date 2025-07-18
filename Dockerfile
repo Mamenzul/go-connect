@@ -2,12 +2,11 @@
 FROM docker.io/oven/bun:1.2 as frontend-build
 
 # Copy only the frontend sources (better cache utilisation)
+WORKDIR /app
+COPY public/frontend/ ./public/frontend/  
+                 
 WORKDIR /app/public/frontend
-COPY public/frontend/ .                    
-
-# Install deps & build
-RUN bun install --frozen-lockfile                
- && bun run build                                
+RUN bun install --frozen-lockfile && bun run build                   
 
 
 # ──────────────── 2) Build the Go backend ────────────────
