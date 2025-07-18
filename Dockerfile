@@ -1,13 +1,13 @@
 # ──────────────── 1) Build the Vite frontend with Bun ────────────────
-FROM docker.io/oven/bun:1.1 as frontend-build            # lightweight Bun image
+FROM docker.io/oven/bun:1.1 as frontend-build
 
 # Copy only the frontend sources (better cache utilisation)
 WORKDIR /app/public/frontend
-COPY public/frontend/ .                           # → /app/public/frontend
+COPY public/frontend/ .                    
 
 # Install deps & build
-RUN bun install --frozen-lockfile                 \
- && bun run build                                 # output: /app/public/frontend/dist
+RUN bun install --frozen-lockfile                
+ && bun run build                                
 
 
 # ──────────────── 2) Build the Go backend ────────────────
