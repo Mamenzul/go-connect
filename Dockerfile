@@ -1,5 +1,5 @@
 # ──────────────── 1) Build the Vite frontend with Bun ────────────────
-FROM docker.io/oven/bun:1.1 as frontend-build
+FROM docker.io/oven/bun:1.2 as frontend-build
 
 # Copy only the frontend sources (better cache utilisation)
 WORKDIR /app/public/frontend
