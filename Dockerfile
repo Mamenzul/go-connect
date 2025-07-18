@@ -6,7 +6,7 @@ WORKDIR /app
 COPY public/frontend/ ./public/frontend/  
                  
 WORKDIR /app/public/frontend
-RUN bun install && bun run build                   
+RUN bun install --frozen-lockfile && bun run build                   
 
 
 # ──────────────── 2) Build the Go backend ────────────────
