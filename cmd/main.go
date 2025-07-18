@@ -62,8 +62,8 @@ func main() {
 		http.ServeFile(w, r, filepath.Join(distDir, "index.html"))
 	})
 
-	log.Println("✅ Server running on http://localhost:8080")
-	if err := http.ListenAndServe(":8080", utils.WithCORS(mux)); err != nil {
+	log.Println("✅ Server running on http://localhost:9090")
+	if err := http.ListenAndServe(":9090", utils.WithCORS(mux)); err != nil {
 		log.Fatal(err)
 	}
 }
