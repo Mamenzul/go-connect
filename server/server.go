@@ -40,3 +40,7 @@ func (s *Server) StreamRoomEvents(ctx context.Context, req *connect.Request[lobb
 func (s *Server) SendMessage(ctx context.Context, req *connect.Request[lobbypb.PlayerSentMessageRequest]) (*connect.Response[lobbypb.PlayerSentMessageResponse], error) {
 	return s.RoomService.SendMessage(ctx, req)
 }
+
+func (s *Server) Ping(ctx context.Context, req *connect.Request[lobbypb.PingRequest]) (*connect.Response[lobbypb.PingResponse], error) {
+	return s.RoomService.Ping(ctx, req)
+}

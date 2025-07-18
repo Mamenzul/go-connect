@@ -83,6 +83,118 @@ func (x *PlayerInfo) GetIsHost() bool {
 	return false
 }
 
+type PingRequest struct {
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	RoomId               string                 `protobuf:"bytes,1,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty"`
+	PlayerId             string                 `protobuf:"bytes,2,opt,name=player_id,json=playerId,proto3" json:"player_id,omitempty"`
+	ClientTimeUnixMillis int64                  `protobuf:"varint,3,opt,name=client_time_unix_millis,json=clientTimeUnixMillis,proto3" json:"client_time_unix_millis,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *PingRequest) Reset() {
+	*x = PingRequest{}
+	mi := &file_file_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PingRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PingRequest) ProtoMessage() {}
+
+func (x *PingRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_file_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PingRequest.ProtoReflect.Descriptor instead.
+func (*PingRequest) Descriptor() ([]byte, []int) {
+	return file_file_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *PingRequest) GetRoomId() string {
+	if x != nil {
+		return x.RoomId
+	}
+	return ""
+}
+
+func (x *PingRequest) GetPlayerId() string {
+	if x != nil {
+		return x.PlayerId
+	}
+	return ""
+}
+
+func (x *PingRequest) GetClientTimeUnixMillis() int64 {
+	if x != nil {
+		return x.ClientTimeUnixMillis
+	}
+	return 0
+}
+
+type PingResponse struct {
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	PlayerId             string                 `protobuf:"bytes,1,opt,name=player_id,json=playerId,proto3" json:"player_id,omitempty"`
+	ServerTimeUnixMillis int64                  `protobuf:"varint,2,opt,name=ServerTimeUnixMillis,proto3" json:"ServerTimeUnixMillis,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *PingResponse) Reset() {
+	*x = PingResponse{}
+	mi := &file_file_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PingResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PingResponse) ProtoMessage() {}
+
+func (x *PingResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_file_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PingResponse.ProtoReflect.Descriptor instead.
+func (*PingResponse) Descriptor() ([]byte, []int) {
+	return file_file_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *PingResponse) GetPlayerId() string {
+	if x != nil {
+		return x.PlayerId
+	}
+	return ""
+}
+
+func (x *PingResponse) GetServerTimeUnixMillis() int64 {
+	if x != nil {
+		return x.ServerTimeUnixMillis
+	}
+	return 0
+}
+
 // Create room
 type CreateRoomRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -94,7 +206,7 @@ type CreateRoomRequest struct {
 
 func (x *CreateRoomRequest) Reset() {
 	*x = CreateRoomRequest{}
-	mi := &file_file_proto_msgTypes[1]
+	mi := &file_file_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -106,7 +218,7 @@ func (x *CreateRoomRequest) String() string {
 func (*CreateRoomRequest) ProtoMessage() {}
 
 func (x *CreateRoomRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_file_proto_msgTypes[1]
+	mi := &file_file_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -119,7 +231,7 @@ func (x *CreateRoomRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateRoomRequest.ProtoReflect.Descriptor instead.
 func (*CreateRoomRequest) Descriptor() ([]byte, []int) {
-	return file_file_proto_rawDescGZIP(), []int{1}
+	return file_file_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *CreateRoomRequest) GetPlayerId() string {
@@ -147,7 +259,7 @@ type CreateRoomResponse struct {
 
 func (x *CreateRoomResponse) Reset() {
 	*x = CreateRoomResponse{}
-	mi := &file_file_proto_msgTypes[2]
+	mi := &file_file_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -159,7 +271,7 @@ func (x *CreateRoomResponse) String() string {
 func (*CreateRoomResponse) ProtoMessage() {}
 
 func (x *CreateRoomResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_file_proto_msgTypes[2]
+	mi := &file_file_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -172,7 +284,7 @@ func (x *CreateRoomResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateRoomResponse.ProtoReflect.Descriptor instead.
 func (*CreateRoomResponse) Descriptor() ([]byte, []int) {
-	return file_file_proto_rawDescGZIP(), []int{2}
+	return file_file_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CreateRoomResponse) GetRoomId() string {
@@ -208,7 +320,7 @@ type JoinRoomRequest struct {
 
 func (x *JoinRoomRequest) Reset() {
 	*x = JoinRoomRequest{}
-	mi := &file_file_proto_msgTypes[3]
+	mi := &file_file_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -220,7 +332,7 @@ func (x *JoinRoomRequest) String() string {
 func (*JoinRoomRequest) ProtoMessage() {}
 
 func (x *JoinRoomRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_file_proto_msgTypes[3]
+	mi := &file_file_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -233,7 +345,7 @@ func (x *JoinRoomRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use JoinRoomRequest.ProtoReflect.Descriptor instead.
 func (*JoinRoomRequest) Descriptor() ([]byte, []int) {
-	return file_file_proto_rawDescGZIP(), []int{3}
+	return file_file_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *JoinRoomRequest) GetRoomId() string {
@@ -267,7 +379,7 @@ type JoinRoomResponse struct {
 
 func (x *JoinRoomResponse) Reset() {
 	*x = JoinRoomResponse{}
-	mi := &file_file_proto_msgTypes[4]
+	mi := &file_file_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -279,7 +391,7 @@ func (x *JoinRoomResponse) String() string {
 func (*JoinRoomResponse) ProtoMessage() {}
 
 func (x *JoinRoomResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_file_proto_msgTypes[4]
+	mi := &file_file_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -292,7 +404,7 @@ func (x *JoinRoomResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use JoinRoomResponse.ProtoReflect.Descriptor instead.
 func (*JoinRoomResponse) Descriptor() ([]byte, []int) {
-	return file_file_proto_rawDescGZIP(), []int{4}
+	return file_file_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *JoinRoomResponse) GetSuccess() bool {
@@ -320,7 +432,7 @@ type LeaveRoomRequest struct {
 
 func (x *LeaveRoomRequest) Reset() {
 	*x = LeaveRoomRequest{}
-	mi := &file_file_proto_msgTypes[5]
+	mi := &file_file_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -332,7 +444,7 @@ func (x *LeaveRoomRequest) String() string {
 func (*LeaveRoomRequest) ProtoMessage() {}
 
 func (x *LeaveRoomRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_file_proto_msgTypes[5]
+	mi := &file_file_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -345,7 +457,7 @@ func (x *LeaveRoomRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LeaveRoomRequest.ProtoReflect.Descriptor instead.
 func (*LeaveRoomRequest) Descriptor() ([]byte, []int) {
-	return file_file_proto_rawDescGZIP(), []int{5}
+	return file_file_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *LeaveRoomRequest) GetRoomId() string {
@@ -372,7 +484,7 @@ type LeaveRoomResponse struct {
 
 func (x *LeaveRoomResponse) Reset() {
 	*x = LeaveRoomResponse{}
-	mi := &file_file_proto_msgTypes[6]
+	mi := &file_file_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -384,7 +496,7 @@ func (x *LeaveRoomResponse) String() string {
 func (*LeaveRoomResponse) ProtoMessage() {}
 
 func (x *LeaveRoomResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_file_proto_msgTypes[6]
+	mi := &file_file_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -397,7 +509,7 @@ func (x *LeaveRoomResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LeaveRoomResponse.ProtoReflect.Descriptor instead.
 func (*LeaveRoomResponse) Descriptor() ([]byte, []int) {
-	return file_file_proto_rawDescGZIP(), []int{6}
+	return file_file_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *LeaveRoomResponse) GetSuccess() bool {
@@ -424,7 +536,7 @@ type ListMembersRequest struct {
 
 func (x *ListMembersRequest) Reset() {
 	*x = ListMembersRequest{}
-	mi := &file_file_proto_msgTypes[7]
+	mi := &file_file_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -436,7 +548,7 @@ func (x *ListMembersRequest) String() string {
 func (*ListMembersRequest) ProtoMessage() {}
 
 func (x *ListMembersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_file_proto_msgTypes[7]
+	mi := &file_file_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -449,7 +561,7 @@ func (x *ListMembersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListMembersRequest.ProtoReflect.Descriptor instead.
 func (*ListMembersRequest) Descriptor() ([]byte, []int) {
-	return file_file_proto_rawDescGZIP(), []int{7}
+	return file_file_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *ListMembersRequest) GetRoomId() string {
@@ -468,7 +580,7 @@ type ListMembersResponse struct {
 
 func (x *ListMembersResponse) Reset() {
 	*x = ListMembersResponse{}
-	mi := &file_file_proto_msgTypes[8]
+	mi := &file_file_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -480,7 +592,7 @@ func (x *ListMembersResponse) String() string {
 func (*ListMembersResponse) ProtoMessage() {}
 
 func (x *ListMembersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_file_proto_msgTypes[8]
+	mi := &file_file_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -493,7 +605,7 @@ func (x *ListMembersResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListMembersResponse.ProtoReflect.Descriptor instead.
 func (*ListMembersResponse) Descriptor() ([]byte, []int) {
-	return file_file_proto_rawDescGZIP(), []int{8}
+	return file_file_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *ListMembersResponse) GetPlayers() []*PlayerInfo {
@@ -515,7 +627,7 @@ type PlayerSentMessageRequest struct {
 
 func (x *PlayerSentMessageRequest) Reset() {
 	*x = PlayerSentMessageRequest{}
-	mi := &file_file_proto_msgTypes[9]
+	mi := &file_file_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -527,7 +639,7 @@ func (x *PlayerSentMessageRequest) String() string {
 func (*PlayerSentMessageRequest) ProtoMessage() {}
 
 func (x *PlayerSentMessageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_file_proto_msgTypes[9]
+	mi := &file_file_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -540,7 +652,7 @@ func (x *PlayerSentMessageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PlayerSentMessageRequest.ProtoReflect.Descriptor instead.
 func (*PlayerSentMessageRequest) Descriptor() ([]byte, []int) {
-	return file_file_proto_rawDescGZIP(), []int{9}
+	return file_file_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *PlayerSentMessageRequest) GetRoomId() string {
@@ -574,7 +686,7 @@ type PlayerSentMessageResponse struct {
 
 func (x *PlayerSentMessageResponse) Reset() {
 	*x = PlayerSentMessageResponse{}
-	mi := &file_file_proto_msgTypes[10]
+	mi := &file_file_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -586,7 +698,7 @@ func (x *PlayerSentMessageResponse) String() string {
 func (*PlayerSentMessageResponse) ProtoMessage() {}
 
 func (x *PlayerSentMessageResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_file_proto_msgTypes[10]
+	mi := &file_file_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -599,7 +711,7 @@ func (x *PlayerSentMessageResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PlayerSentMessageResponse.ProtoReflect.Descriptor instead.
 func (*PlayerSentMessageResponse) Descriptor() ([]byte, []int) {
-	return file_file_proto_rawDescGZIP(), []int{10}
+	return file_file_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *PlayerSentMessageResponse) GetSuccess() bool {
@@ -628,7 +740,7 @@ type PlayerJoinedBroadcast struct {
 
 func (x *PlayerJoinedBroadcast) Reset() {
 	*x = PlayerJoinedBroadcast{}
-	mi := &file_file_proto_msgTypes[11]
+	mi := &file_file_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -640,7 +752,7 @@ func (x *PlayerJoinedBroadcast) String() string {
 func (*PlayerJoinedBroadcast) ProtoMessage() {}
 
 func (x *PlayerJoinedBroadcast) ProtoReflect() protoreflect.Message {
-	mi := &file_file_proto_msgTypes[11]
+	mi := &file_file_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -653,7 +765,7 @@ func (x *PlayerJoinedBroadcast) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PlayerJoinedBroadcast.ProtoReflect.Descriptor instead.
 func (*PlayerJoinedBroadcast) Descriptor() ([]byte, []int) {
-	return file_file_proto_rawDescGZIP(), []int{11}
+	return file_file_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *PlayerJoinedBroadcast) GetRoomId() string {
@@ -688,7 +800,7 @@ type PlayerLeftBroadcast struct {
 
 func (x *PlayerLeftBroadcast) Reset() {
 	*x = PlayerLeftBroadcast{}
-	mi := &file_file_proto_msgTypes[12]
+	mi := &file_file_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -700,7 +812,7 @@ func (x *PlayerLeftBroadcast) String() string {
 func (*PlayerLeftBroadcast) ProtoMessage() {}
 
 func (x *PlayerLeftBroadcast) ProtoReflect() protoreflect.Message {
-	mi := &file_file_proto_msgTypes[12]
+	mi := &file_file_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -713,7 +825,7 @@ func (x *PlayerLeftBroadcast) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PlayerLeftBroadcast.ProtoReflect.Descriptor instead.
 func (*PlayerLeftBroadcast) Descriptor() ([]byte, []int) {
-	return file_file_proto_rawDescGZIP(), []int{12}
+	return file_file_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *PlayerLeftBroadcast) GetRoomId() string {
@@ -749,7 +861,7 @@ type ChatMessageBroadcast struct {
 
 func (x *ChatMessageBroadcast) Reset() {
 	*x = ChatMessageBroadcast{}
-	mi := &file_file_proto_msgTypes[13]
+	mi := &file_file_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -761,7 +873,7 @@ func (x *ChatMessageBroadcast) String() string {
 func (*ChatMessageBroadcast) ProtoMessage() {}
 
 func (x *ChatMessageBroadcast) ProtoReflect() protoreflect.Message {
-	mi := &file_file_proto_msgTypes[13]
+	mi := &file_file_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -774,7 +886,7 @@ func (x *ChatMessageBroadcast) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChatMessageBroadcast.ProtoReflect.Descriptor instead.
 func (*ChatMessageBroadcast) Descriptor() ([]byte, []int) {
-	return file_file_proto_rawDescGZIP(), []int{13}
+	return file_file_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *ChatMessageBroadcast) GetRoomId() string {
@@ -814,7 +926,7 @@ type RoomEventRequest struct {
 
 func (x *RoomEventRequest) Reset() {
 	*x = RoomEventRequest{}
-	mi := &file_file_proto_msgTypes[14]
+	mi := &file_file_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -826,7 +938,7 @@ func (x *RoomEventRequest) String() string {
 func (*RoomEventRequest) ProtoMessage() {}
 
 func (x *RoomEventRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_file_proto_msgTypes[14]
+	mi := &file_file_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -839,7 +951,7 @@ func (x *RoomEventRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RoomEventRequest.ProtoReflect.Descriptor instead.
 func (*RoomEventRequest) Descriptor() ([]byte, []int) {
-	return file_file_proto_rawDescGZIP(), []int{14}
+	return file_file_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *RoomEventRequest) GetRoomId() string {
@@ -849,6 +961,74 @@ func (x *RoomEventRequest) GetRoomId() string {
 	return ""
 }
 
+type PingBroadcast struct {
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	RoomId               string                 `protobuf:"bytes,1,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty"`
+	PlayerId             string                 `protobuf:"bytes,2,opt,name=player_id,json=playerId,proto3" json:"player_id,omitempty"`
+	LatencyMs            int64                  `protobuf:"varint,3,opt,name=latency_ms,json=latencyMs,proto3" json:"latency_ms,omitempty"`
+	ServerTimeUnixMillis int64                  `protobuf:"varint,4,opt,name=server_time_unix_millis,json=serverTimeUnixMillis,proto3" json:"server_time_unix_millis,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *PingBroadcast) Reset() {
+	*x = PingBroadcast{}
+	mi := &file_file_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PingBroadcast) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PingBroadcast) ProtoMessage() {}
+
+func (x *PingBroadcast) ProtoReflect() protoreflect.Message {
+	mi := &file_file_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PingBroadcast.ProtoReflect.Descriptor instead.
+func (*PingBroadcast) Descriptor() ([]byte, []int) {
+	return file_file_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *PingBroadcast) GetRoomId() string {
+	if x != nil {
+		return x.RoomId
+	}
+	return ""
+}
+
+func (x *PingBroadcast) GetPlayerId() string {
+	if x != nil {
+		return x.PlayerId
+	}
+	return ""
+}
+
+func (x *PingBroadcast) GetLatencyMs() int64 {
+	if x != nil {
+		return x.LatencyMs
+	}
+	return 0
+}
+
+func (x *PingBroadcast) GetServerTimeUnixMillis() int64 {
+	if x != nil {
+		return x.ServerTimeUnixMillis
+	}
+	return 0
+}
+
 type RoomEvent struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Event:
@@ -856,6 +1036,7 @@ type RoomEvent struct {
 	//	*RoomEvent_PlayerJoined
 	//	*RoomEvent_PlayerLeft
 	//	*RoomEvent_ChatMessageBroadcast
+	//	*RoomEvent_PingBroadcast
 	Event         isRoomEvent_Event `protobuf_oneof:"event"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -863,7 +1044,7 @@ type RoomEvent struct {
 
 func (x *RoomEvent) Reset() {
 	*x = RoomEvent{}
-	mi := &file_file_proto_msgTypes[15]
+	mi := &file_file_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -875,7 +1056,7 @@ func (x *RoomEvent) String() string {
 func (*RoomEvent) ProtoMessage() {}
 
 func (x *RoomEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_file_proto_msgTypes[15]
+	mi := &file_file_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -888,7 +1069,7 @@ func (x *RoomEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RoomEvent.ProtoReflect.Descriptor instead.
 func (*RoomEvent) Descriptor() ([]byte, []int) {
-	return file_file_proto_rawDescGZIP(), []int{15}
+	return file_file_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *RoomEvent) GetEvent() isRoomEvent_Event {
@@ -925,6 +1106,15 @@ func (x *RoomEvent) GetChatMessageBroadcast() *ChatMessageBroadcast {
 	return nil
 }
 
+func (x *RoomEvent) GetPingBroadcast() *PingBroadcast {
+	if x != nil {
+		if x, ok := x.Event.(*RoomEvent_PingBroadcast); ok {
+			return x.PingBroadcast
+		}
+	}
+	return nil
+}
+
 type isRoomEvent_Event interface {
 	isRoomEvent_Event()
 }
@@ -941,11 +1131,17 @@ type RoomEvent_ChatMessageBroadcast struct {
 	ChatMessageBroadcast *ChatMessageBroadcast `protobuf:"bytes,3,opt,name=chat_message_broadcast,json=chatMessageBroadcast,proto3,oneof"`
 }
 
+type RoomEvent_PingBroadcast struct {
+	PingBroadcast *PingBroadcast `protobuf:"bytes,99,opt,name=ping_broadcast,json=pingBroadcast,proto3,oneof"`
+}
+
 func (*RoomEvent_PlayerJoined) isRoomEvent_Event() {}
 
 func (*RoomEvent_PlayerLeft) isRoomEvent_Event() {}
 
 func (*RoomEvent_ChatMessageBroadcast) isRoomEvent_Event() {}
+
+func (*RoomEvent_PingBroadcast) isRoomEvent_Event() {}
 
 var File_file_proto protoreflect.FileDescriptor
 
@@ -958,7 +1154,14 @@ const file_file_proto_rawDesc = "" +
 	"\tplayer_id\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\bplayerId\x12(\n" +
 	"\vplayer_name\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\n" +
 	"playerName\x12\x17\n" +
-	"\ais_host\x18\x03 \x01(\bR\x06isHost\"c\n" +
+	"\ais_host\x18\x03 \x01(\bR\x06isHost\"\x8c\x01\n" +
+	"\vPingRequest\x12 \n" +
+	"\aroom_id\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x06roomId\x12$\n" +
+	"\tplayer_id\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\bplayerId\x125\n" +
+	"\x17client_time_unix_millis\x18\x03 \x01(\x03R\x14clientTimeUnixMillis\"_\n" +
+	"\fPingResponse\x12\x1b\n" +
+	"\tplayer_id\x18\x01 \x01(\tR\bplayerId\x122\n" +
+	"\x14ServerTimeUnixMillis\x18\x02 \x01(\x03R\x14ServerTimeUnixMillis\"c\n" +
 	"\x11CreateRoomRequest\x12$\n" +
 	"\tplayer_id\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\bplayerId\x12(\n" +
 	"\vplayer_name\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\n" +
@@ -1006,14 +1209,22 @@ const file_file_proto_rawDesc = "" +
 	"\amessage\x18\x03 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\amessage\x12\x1c\n" +
 	"\ttimestamp\x18\x04 \x01(\x03R\ttimestamp\"4\n" +
 	"\x10RoomEventRequest\x12 \n" +
-	"\aroom_id\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x06roomId\"\xed\x01\n" +
+	"\aroom_id\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x06roomId\"\x9b\x01\n" +
+	"\rPingBroadcast\x12\x17\n" +
+	"\aroom_id\x18\x01 \x01(\tR\x06roomId\x12\x1b\n" +
+	"\tplayer_id\x18\x02 \x01(\tR\bplayerId\x12\x1d\n" +
+	"\n" +
+	"latency_ms\x18\x03 \x01(\x03R\tlatencyMs\x125\n" +
+	"\x17server_time_unix_millis\x18\x04 \x01(\x03R\x14serverTimeUnixMillis\"\xac\x02\n" +
 	"\tRoomEvent\x12C\n" +
 	"\rplayer_joined\x18\x01 \x01(\v2\x1c.lobby.PlayerJoinedBroadcastH\x00R\fplayerJoined\x12=\n" +
 	"\vplayer_left\x18\x02 \x01(\v2\x1a.lobby.PlayerLeftBroadcastH\x00R\n" +
 	"playerLeft\x12S\n" +
-	"\x16chat_message_broadcast\x18\x03 \x01(\v2\x1b.lobby.ChatMessageBroadcastH\x00R\x14chatMessageBroadcastB\a\n" +
-	"\x05event2\xe5\x02\n" +
-	"\vRoomService\x12A\n" +
+	"\x16chat_message_broadcast\x18\x03 \x01(\v2\x1b.lobby.ChatMessageBroadcastH\x00R\x14chatMessageBroadcast\x12=\n" +
+	"\x0eping_broadcast\x18c \x01(\v2\x14.lobby.PingBroadcastH\x00R\rpingBroadcastB\a\n" +
+	"\x05event2\x96\x03\n" +
+	"\vRoomService\x12/\n" +
+	"\x04Ping\x12\x12.lobby.PingRequest\x1a\x13.lobby.PingResponse\x12A\n" +
 	"\n" +
 	"CreateRoom\x12\x18.lobby.CreateRoomRequest\x1a\x19.lobby.CreateRoomResponse\x12;\n" +
 	"\bJoinRoom\x12\x16.lobby.JoinRoomRequest\x1a\x17.lobby.JoinRoomResponse\x12>\n" +
@@ -1035,50 +1246,56 @@ func file_file_proto_rawDescGZIP() []byte {
 	return file_file_proto_rawDescData
 }
 
-var file_file_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_file_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_file_proto_goTypes = []any{
 	(*PlayerInfo)(nil),                // 0: lobby.PlayerInfo
-	(*CreateRoomRequest)(nil),         // 1: lobby.CreateRoomRequest
-	(*CreateRoomResponse)(nil),        // 2: lobby.CreateRoomResponse
-	(*JoinRoomRequest)(nil),           // 3: lobby.JoinRoomRequest
-	(*JoinRoomResponse)(nil),          // 4: lobby.JoinRoomResponse
-	(*LeaveRoomRequest)(nil),          // 5: lobby.LeaveRoomRequest
-	(*LeaveRoomResponse)(nil),         // 6: lobby.LeaveRoomResponse
-	(*ListMembersRequest)(nil),        // 7: lobby.ListMembersRequest
-	(*ListMembersResponse)(nil),       // 8: lobby.ListMembersResponse
-	(*PlayerSentMessageRequest)(nil),  // 9: lobby.PlayerSentMessageRequest
-	(*PlayerSentMessageResponse)(nil), // 10: lobby.PlayerSentMessageResponse
-	(*PlayerJoinedBroadcast)(nil),     // 11: lobby.PlayerJoinedBroadcast
-	(*PlayerLeftBroadcast)(nil),       // 12: lobby.PlayerLeftBroadcast
-	(*ChatMessageBroadcast)(nil),      // 13: lobby.ChatMessageBroadcast
-	(*RoomEventRequest)(nil),          // 14: lobby.RoomEventRequest
-	(*RoomEvent)(nil),                 // 15: lobby.RoomEvent
+	(*PingRequest)(nil),               // 1: lobby.PingRequest
+	(*PingResponse)(nil),              // 2: lobby.PingResponse
+	(*CreateRoomRequest)(nil),         // 3: lobby.CreateRoomRequest
+	(*CreateRoomResponse)(nil),        // 4: lobby.CreateRoomResponse
+	(*JoinRoomRequest)(nil),           // 5: lobby.JoinRoomRequest
+	(*JoinRoomResponse)(nil),          // 6: lobby.JoinRoomResponse
+	(*LeaveRoomRequest)(nil),          // 7: lobby.LeaveRoomRequest
+	(*LeaveRoomResponse)(nil),         // 8: lobby.LeaveRoomResponse
+	(*ListMembersRequest)(nil),        // 9: lobby.ListMembersRequest
+	(*ListMembersResponse)(nil),       // 10: lobby.ListMembersResponse
+	(*PlayerSentMessageRequest)(nil),  // 11: lobby.PlayerSentMessageRequest
+	(*PlayerSentMessageResponse)(nil), // 12: lobby.PlayerSentMessageResponse
+	(*PlayerJoinedBroadcast)(nil),     // 13: lobby.PlayerJoinedBroadcast
+	(*PlayerLeftBroadcast)(nil),       // 14: lobby.PlayerLeftBroadcast
+	(*ChatMessageBroadcast)(nil),      // 15: lobby.ChatMessageBroadcast
+	(*RoomEventRequest)(nil),          // 16: lobby.RoomEventRequest
+	(*PingBroadcast)(nil),             // 17: lobby.PingBroadcast
+	(*RoomEvent)(nil),                 // 18: lobby.RoomEvent
 }
 var file_file_proto_depIdxs = []int32{
 	0,  // 0: lobby.ListMembersResponse.players:type_name -> lobby.PlayerInfo
 	0,  // 1: lobby.PlayerJoinedBroadcast.player:type_name -> lobby.PlayerInfo
 	0,  // 2: lobby.PlayerLeftBroadcast.player:type_name -> lobby.PlayerInfo
 	0,  // 3: lobby.ChatMessageBroadcast.player:type_name -> lobby.PlayerInfo
-	11, // 4: lobby.RoomEvent.player_joined:type_name -> lobby.PlayerJoinedBroadcast
-	12, // 5: lobby.RoomEvent.player_left:type_name -> lobby.PlayerLeftBroadcast
-	13, // 6: lobby.RoomEvent.chat_message_broadcast:type_name -> lobby.ChatMessageBroadcast
-	1,  // 7: lobby.RoomService.CreateRoom:input_type -> lobby.CreateRoomRequest
-	3,  // 8: lobby.RoomService.JoinRoom:input_type -> lobby.JoinRoomRequest
-	5,  // 9: lobby.RoomService.LeaveRoom:input_type -> lobby.LeaveRoomRequest
-	7,  // 10: lobby.RoomService.ListMembers:input_type -> lobby.ListMembersRequest
-	9,  // 11: lobby.RoomService.SendMessage:input_type -> lobby.PlayerSentMessageRequest
-	14, // 12: lobby.RoomBroadcast.StreamRoomEvents:input_type -> lobby.RoomEventRequest
-	2,  // 13: lobby.RoomService.CreateRoom:output_type -> lobby.CreateRoomResponse
-	4,  // 14: lobby.RoomService.JoinRoom:output_type -> lobby.JoinRoomResponse
-	6,  // 15: lobby.RoomService.LeaveRoom:output_type -> lobby.LeaveRoomResponse
-	8,  // 16: lobby.RoomService.ListMembers:output_type -> lobby.ListMembersResponse
-	10, // 17: lobby.RoomService.SendMessage:output_type -> lobby.PlayerSentMessageResponse
-	15, // 18: lobby.RoomBroadcast.StreamRoomEvents:output_type -> lobby.RoomEvent
-	13, // [13:19] is the sub-list for method output_type
-	7,  // [7:13] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	13, // 4: lobby.RoomEvent.player_joined:type_name -> lobby.PlayerJoinedBroadcast
+	14, // 5: lobby.RoomEvent.player_left:type_name -> lobby.PlayerLeftBroadcast
+	15, // 6: lobby.RoomEvent.chat_message_broadcast:type_name -> lobby.ChatMessageBroadcast
+	17, // 7: lobby.RoomEvent.ping_broadcast:type_name -> lobby.PingBroadcast
+	1,  // 8: lobby.RoomService.Ping:input_type -> lobby.PingRequest
+	3,  // 9: lobby.RoomService.CreateRoom:input_type -> lobby.CreateRoomRequest
+	5,  // 10: lobby.RoomService.JoinRoom:input_type -> lobby.JoinRoomRequest
+	7,  // 11: lobby.RoomService.LeaveRoom:input_type -> lobby.LeaveRoomRequest
+	9,  // 12: lobby.RoomService.ListMembers:input_type -> lobby.ListMembersRequest
+	11, // 13: lobby.RoomService.SendMessage:input_type -> lobby.PlayerSentMessageRequest
+	16, // 14: lobby.RoomBroadcast.StreamRoomEvents:input_type -> lobby.RoomEventRequest
+	2,  // 15: lobby.RoomService.Ping:output_type -> lobby.PingResponse
+	4,  // 16: lobby.RoomService.CreateRoom:output_type -> lobby.CreateRoomResponse
+	6,  // 17: lobby.RoomService.JoinRoom:output_type -> lobby.JoinRoomResponse
+	8,  // 18: lobby.RoomService.LeaveRoom:output_type -> lobby.LeaveRoomResponse
+	10, // 19: lobby.RoomService.ListMembers:output_type -> lobby.ListMembersResponse
+	12, // 20: lobby.RoomService.SendMessage:output_type -> lobby.PlayerSentMessageResponse
+	18, // 21: lobby.RoomBroadcast.StreamRoomEvents:output_type -> lobby.RoomEvent
+	15, // [15:22] is the sub-list for method output_type
+	8,  // [8:15] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_file_proto_init() }
@@ -1086,10 +1303,11 @@ func file_file_proto_init() {
 	if File_file_proto != nil {
 		return
 	}
-	file_file_proto_msgTypes[15].OneofWrappers = []any{
+	file_file_proto_msgTypes[18].OneofWrappers = []any{
 		(*RoomEvent_PlayerJoined)(nil),
 		(*RoomEvent_PlayerLeft)(nil),
 		(*RoomEvent_ChatMessageBroadcast)(nil),
+		(*RoomEvent_PingBroadcast)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1097,7 +1315,7 @@ func file_file_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_file_proto_rawDesc), len(file_file_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   16,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   2,
 		},

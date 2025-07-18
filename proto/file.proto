@@ -13,6 +13,17 @@ message PlayerInfo {
   bool is_host = 3;
 }
 
+message PingRequest {
+  string room_id = 1 [(buf.validate.field).string.min_len = 1];
+  string player_id = 2 [(buf.validate.field).string.min_len = 1];
+  int64 client_time_unix_millis = 3;
+}
+
+message PingResponse {
+  string player_id = 1;
+  int64 ServerTimeUnixMillis = 2;
+}
+
 // Create room
 message CreateRoomRequest {
   string player_id = 1 [(buf.validate.field).string.min_len = 1];
@@ -92,16 +103,25 @@ message RoomEventRequest {
   string room_id = 1 [(buf.validate.field).string.min_len = 1];
 }
 
+message PingBroadcast {
+  string room_id = 1;
+  string player_id = 2;
+  int64 latency_ms = 3;
+  int64 server_time_unix_millis = 4;
+}
+
 message RoomEvent {
   oneof event {
     PlayerJoinedBroadcast player_joined = 1;
     PlayerLeftBroadcast player_left = 2;
     ChatMessageBroadcast  chat_message_broadcast = 3;
+    PingBroadcast ping_broadcast = 99;
   }
 }
 
 // Service for room management
 service RoomService {
+  rpc Ping(PingRequest) returns (PingResponse);
   rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
   rpc JoinRoom(JoinRoomRequest) returns (JoinRoomResponse);
   rpc LeaveRoom(LeaveRoomRequest) returns (LeaveRoomResponse);

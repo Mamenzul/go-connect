@@ -19,6 +19,7 @@ type Service interface {
 	ListMembers(ctx context.Context, req *connect.Request[lobbypb.ListMembersRequest]) (*connect.Response[lobbypb.ListMembersResponse], error)
 	StreamRoomEvents(ctx context.Context, req *connect.Request[lobbypb.RoomEventRequest], stream *connect.ServerStream[lobbypb.RoomEvent]) error
 	SendMessage(ctx context.Context, req *connect.Request[lobbypb.PlayerSentMessageRequest]) (*connect.Response[lobbypb.PlayerSentMessageResponse], error)
+	Ping(ctx context.Context, req *connect.Request[lobbypb.PingRequest]) (*connect.Response[lobbypb.PingResponse], error)
 }
 
 type InMemoryService struct {
@@ -314,4 +315,50 @@ func (r InMemoryService) SendMessage(ctx context.Context, req *connect.Request[l
 		Success: true,
 		Message: "Message sent",
 	}), nil
+}
+
+func (r InMemoryService) Ping(
+	ctx context.Context,
+	req *connect.Request[lobbypb.PingRequest],
+) (*connect.Response[lobbypb.PingResponse], error) {
+	r.mu.RLock()
+	room, ok := r.rooms[req.Msg.RoomId]
+	r.mu.RUnlock()
+
+	if !ok {
+		return connect.NewResponse(&lobbypb.PingResponse{
+			ServerTimeUnixMillis: time.Now().UnixMilli(),
+		}), nil
+	}
+
+	now := time.Now().UnixMilli()
+	latency := now - req.Msg.ClientTimeUnixMillis
+
+	// Broadcast PingBroadcast as RoomEvent
+	if room.broadcast != nil {
+		event := &lobbypb.RoomEvent{
+			Event: &lobbypb.RoomEvent_PingBroadcast{
+				PingBroadcast: &lobbypb.PingBroadcast{
+					RoomId:               req.Msg.RoomId,
+					PlayerId:             req.Msg.PlayerId,
+					LatencyMs:            latency,
+					ServerTimeUnixMillis: now,
+				},
+			},
+		}
+		for _, ch := range room.broadcast {
+			select {
+			case ch <- event:
+			default:
+				// Avoid blocking on full channels
+			}
+		}
+	}
+
+	// Also return server time as response (optional)
+	resp := &lobbypb.PingResponse{
+		ServerTimeUnixMillis: now,
+	}
+
+	return connect.NewResponse(resp), nil
 }

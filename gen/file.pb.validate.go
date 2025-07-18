@@ -140,6 +140,214 @@ var _ interface {
 	ErrorName() string
 } = PlayerInfoValidationError{}
 
+// Validate checks the field values on PingRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *PingRequest) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PingRequest with the rules defined in
+// the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PingRequestMultiError, or
+// nil if none found.
+func (m *PingRequest) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PingRequest) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for RoomId
+
+	// no validation rules for PlayerId
+
+	// no validation rules for ClientTimeUnixMillis
+
+	if len(errors) > 0 {
+		return PingRequestMultiError(errors)
+	}
+
+	return nil
+}
+
+// PingRequestMultiError is an error wrapping multiple validation errors
+// returned by PingRequest.ValidateAll() if the designated constraints aren't met.
+type PingRequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PingRequestMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PingRequestMultiError) AllErrors() []error { return m }
+
+// PingRequestValidationError is the validation error returned by
+// PingRequest.Validate if the designated constraints aren't met.
+type PingRequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PingRequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PingRequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PingRequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PingRequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PingRequestValidationError) ErrorName() string { return "PingRequestValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PingRequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPingRequest.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PingRequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PingRequestValidationError{}
+
+// Validate checks the field values on PingResponse with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *PingResponse) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PingResponse with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PingResponseMultiError, or
+// nil if none found.
+func (m *PingResponse) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PingResponse) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for PlayerId
+
+	// no validation rules for ServerTimeUnixMillis
+
+	if len(errors) > 0 {
+		return PingResponseMultiError(errors)
+	}
+
+	return nil
+}
+
+// PingResponseMultiError is an error wrapping multiple validation errors
+// returned by PingResponse.ValidateAll() if the designated constraints aren't met.
+type PingResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PingResponseMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PingResponseMultiError) AllErrors() []error { return m }
+
+// PingResponseValidationError is the validation error returned by
+// PingResponse.Validate if the designated constraints aren't met.
+type PingResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PingResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PingResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PingResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PingResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PingResponseValidationError) ErrorName() string { return "PingResponseValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PingResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPingResponse.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PingResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PingResponseValidationError{}
+
 // Validate checks the field values on CreateRoomRequest with the rules defined
 // in the proto definition for this message. If any rules are violated, the
 // first error encountered is returned, or nil if there are no violations.
@@ -1737,6 +1945,114 @@ var _ interface {
 	ErrorName() string
 } = RoomEventRequestValidationError{}
 
+// Validate checks the field values on PingBroadcast with the rules defined in
+// the proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *PingBroadcast) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PingBroadcast with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// result is a list of violation errors wrapped in PingBroadcastMultiError, or
+// nil if none found.
+func (m *PingBroadcast) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PingBroadcast) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for RoomId
+
+	// no validation rules for PlayerId
+
+	// no validation rules for LatencyMs
+
+	// no validation rules for ServerTimeUnixMillis
+
+	if len(errors) > 0 {
+		return PingBroadcastMultiError(errors)
+	}
+
+	return nil
+}
+
+// PingBroadcastMultiError is an error wrapping multiple validation errors
+// returned by PingBroadcast.ValidateAll() if the designated constraints
+// aren't met.
+type PingBroadcastMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PingBroadcastMultiError) Error() string {
+	msgs := make([]string, 0, len(m))
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PingBroadcastMultiError) AllErrors() []error { return m }
+
+// PingBroadcastValidationError is the validation error returned by
+// PingBroadcast.Validate if the designated constraints aren't met.
+type PingBroadcastValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PingBroadcastValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PingBroadcastValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PingBroadcastValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PingBroadcastValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PingBroadcastValidationError) ErrorName() string { return "PingBroadcastValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PingBroadcastValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPingBroadcast.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PingBroadcastValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PingBroadcastValidationError{}
+
 // Validate checks the field values on RoomEvent with the rules defined in the
 // proto definition for this message. If any rules are violated, the first
 // error encountered is returned, or nil if there are no violations.
@@ -1877,6 +2193,47 @@ func (m *RoomEvent) validate(all bool) error {
 			if err := v.Validate(); err != nil {
 				return RoomEventValidationError{
 					field:  "ChatMessageBroadcast",
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	case *RoomEvent_PingBroadcast:
+		if v == nil {
+			err := RoomEventValidationError{
+				field:  "Event",
+				reason: "oneof value cannot be a typed-nil",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		}
+
+		if all {
+			switch v := interface{}(m.GetPingBroadcast()).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, RoomEventValidationError{
+						field:  "PingBroadcast",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, RoomEventValidationError{
+						field:  "PingBroadcast",
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(m.GetPingBroadcast()).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return RoomEventValidationError{
+					field:  "PingBroadcast",
 					reason: "embedded message failed validation",
 					cause:  err,
 				}

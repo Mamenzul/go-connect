@@ -35,6 +35,8 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
+	// RoomServicePingProcedure is the fully-qualified name of the RoomService's Ping RPC.
+	RoomServicePingProcedure = "/lobby.RoomService/Ping"
 	// RoomServiceCreateRoomProcedure is the fully-qualified name of the RoomService's CreateRoom RPC.
 	RoomServiceCreateRoomProcedure = "/lobby.RoomService/CreateRoom"
 	// RoomServiceJoinRoomProcedure is the fully-qualified name of the RoomService's JoinRoom RPC.
@@ -52,6 +54,7 @@ const (
 
 // RoomServiceClient is a client for the lobby.RoomService service.
 type RoomServiceClient interface {
+	Ping(context.Context, *connect.Request[gen.PingRequest]) (*connect.Response[gen.PingResponse], error)
 	CreateRoom(context.Context, *connect.Request[gen.CreateRoomRequest]) (*connect.Response[gen.CreateRoomResponse], error)
 	JoinRoom(context.Context, *connect.Request[gen.JoinRoomRequest]) (*connect.Response[gen.JoinRoomResponse], error)
 	LeaveRoom(context.Context, *connect.Request[gen.LeaveRoomRequest]) (*connect.Response[gen.LeaveRoomResponse], error)
@@ -70,6 +73,12 @@ func NewRoomServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 	baseURL = strings.TrimRight(baseURL, "/")
 	roomServiceMethods := gen.File_file_proto.Services().ByName("RoomService").Methods()
 	return &roomServiceClient{
+		ping: connect.NewClient[gen.PingRequest, gen.PingResponse](
+			httpClient,
+			baseURL+RoomServicePingProcedure,
+			connect.WithSchema(roomServiceMethods.ByName("Ping")),
+			connect.WithClientOptions(opts...),
+		),
 		createRoom: connect.NewClient[gen.CreateRoomRequest, gen.CreateRoomResponse](
 			httpClient,
 			baseURL+RoomServiceCreateRoomProcedure,
@@ -105,11 +114,17 @@ func NewRoomServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 
 // roomServiceClient implements RoomServiceClient.
 type roomServiceClient struct {
+	ping        *connect.Client[gen.PingRequest, gen.PingResponse]
 	createRoom  *connect.Client[gen.CreateRoomRequest, gen.CreateRoomResponse]
 	joinRoom    *connect.Client[gen.JoinRoomRequest, gen.JoinRoomResponse]
 	leaveRoom   *connect.Client[gen.LeaveRoomRequest, gen.LeaveRoomResponse]
 	listMembers *connect.Client[gen.ListMembersRequest, gen.ListMembersResponse]
 	sendMessage *connect.Client[gen.PlayerSentMessageRequest, gen.PlayerSentMessageResponse]
+}
+
+// Ping calls lobby.RoomService.Ping.
+func (c *roomServiceClient) Ping(ctx context.Context, req *connect.Request[gen.PingRequest]) (*connect.Response[gen.PingResponse], error) {
+	return c.ping.CallUnary(ctx, req)
 }
 
 // CreateRoom calls lobby.RoomService.CreateRoom.
@@ -139,6 +154,7 @@ func (c *roomServiceClient) SendMessage(ctx context.Context, req *connect.Reques
 
 // RoomServiceHandler is an implementation of the lobby.RoomService service.
 type RoomServiceHandler interface {
+	Ping(context.Context, *connect.Request[gen.PingRequest]) (*connect.Response[gen.PingResponse], error)
 	CreateRoom(context.Context, *connect.Request[gen.CreateRoomRequest]) (*connect.Response[gen.CreateRoomResponse], error)
 	JoinRoom(context.Context, *connect.Request[gen.JoinRoomRequest]) (*connect.Response[gen.JoinRoomResponse], error)
 	LeaveRoom(context.Context, *connect.Request[gen.LeaveRoomRequest]) (*connect.Response[gen.LeaveRoomResponse], error)
@@ -153,6 +169,12 @@ type RoomServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewRoomServiceHandler(svc RoomServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
 	roomServiceMethods := gen.File_file_proto.Services().ByName("RoomService").Methods()
+	roomServicePingHandler := connect.NewUnaryHandler(
+		RoomServicePingProcedure,
+		svc.Ping,
+		connect.WithSchema(roomServiceMethods.ByName("Ping")),
+		connect.WithHandlerOptions(opts...),
+	)
 	roomServiceCreateRoomHandler := connect.NewUnaryHandler(
 		RoomServiceCreateRoomProcedure,
 		svc.CreateRoom,
@@ -185,6 +207,8 @@ func NewRoomServiceHandler(svc RoomServiceHandler, opts ...connect.HandlerOption
 	)
 	return "/lobby.RoomService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
+		case RoomServicePingProcedure:
+			roomServicePingHandler.ServeHTTP(w, r)
 		case RoomServiceCreateRoomProcedure:
 			roomServiceCreateRoomHandler.ServeHTTP(w, r)
 		case RoomServiceJoinRoomProcedure:
@@ -203,6 +227,10 @@ func NewRoomServiceHandler(svc RoomServiceHandler, opts ...connect.HandlerOption
 
 // UnimplementedRoomServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedRoomServiceHandler struct{}
+
+func (UnimplementedRoomServiceHandler) Ping(context.Context, *connect.Request[gen.PingRequest]) (*connect.Response[gen.PingResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("lobby.RoomService.Ping is not implemented"))
+}
 
 func (UnimplementedRoomServiceHandler) CreateRoom(context.Context, *connect.Request[gen.CreateRoomRequest]) (*connect.Response[gen.CreateRoomResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("lobby.RoomService.CreateRoom is not implemented"))
